@@ -1,6 +1,4 @@
 Covid-19 Dashboard  
-DT249 Internet Application Development Assessment
-Semester II 2020/2021 - D18124815 - Simone Susino\
 The project is composed by 5 .php and 2 .html files that are the structure of the website, the js folder containing the boostrap and jquery scripts,
 the icons folder with the icons used in the pages and the css folder.
 \
