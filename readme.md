@@ -29,6 +29,7 @@ If you want to use a new database please create the database following the instr
    5. "phone" VARCHAR 255 
    
 The dashboard has been tested in Firefox 88 and Safari 14.1 
+![Screenshot](Screenshot.png)
 
 
 
