@@ -1,5 +1,5 @@
-#Covid-19 Dashboard  
-####DT249 Internet Application Development Assessment
+Covid-19 Dashboard  
+DT249 Internet Application Development Assessment
 Semester II 2020/2021 - D18124815 - Simone Susino\
 The project is composed by 5 .php and 2 .html files that are the structure of the website, the js folder containing the boostrap and jquery scripts,
 the icons folder with the icons used in the pages and the css folder.
@@ -9,7 +9,7 @@ The admin.sql file is outside the covid_dashboard folder and contains the script
 The API collection used is the following one:
 https://documenter.getpostman.com/view/10808728/SzS8rjbc
 
-####Instructions:
+Instructions:
 1. Copy the covid_dashboard folder in your htdocs folder (if you use xampp)
 2. Import the admin.sql file using phpmyadmin
 3. Go to localhost/covid_dashboard from a browser to use the dashboard
