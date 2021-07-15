@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Countries</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="application/javascript" src="js/jquery-3.6.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.js"></script>
+    <style>
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+
+        /* Add a gray background color and some padding to the footer */
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
+            position: fixed;
+            left: 0;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: left;
+        }
+
+        .table td {
+            text-align: justify;
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="index.html">Dashboard</a></li>
+                <li class="active"><a href="countries.html">Live Countries</a></li>
+                <li><a href="admin.php">Admin</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br>
+
+<div class="container-fluid bg-3 text-center">
+    <div class="col-sm-12">
+        <div class="well">
+            <h2>Countries</h2>
+            <h4>Covid-19 Live Information</h4>
+            <h5 id="Date">
+            </h5>
+            <script>//get and show the current time and date
+                const d = new Date();
+                document.getElementById("Date").innerHTML = d;
+            </script>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <!--creating the table to be populated with the data of the world summary API-->
+                <table id = "table" class="table table-striped table-responsive table-bordered table-hover table-sm">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th id ="cc" scope="col">Country Name</th>
+                        <th scope="col">Total Confirmed Cases</th>
+                        <th scope="col">Total Deaths</th>
+                        <th scope="col">Total Recovered</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr id="data">
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            window.addEventListener('load', () => {
+                //script to get the summary json data from the api using to fill the table with id "table"
+                let api_url = "https://api.covid19api.com/summary";
+                let table = document.getElementById("table");
+                const countries = [];
+                console.log(table);
+
+                // call pop_table function
+                pop_table();
+
+                //pop_table will fetch the data from the API url, looping the json file and creating a table
+                function pop_table(){
+                    fetch(api_url).then(response =>{
+                        return response.json();
+                    }).then(data => {
+                        countries.push(...data.Countries);
+                        // console.log(countries);
+                        // console.log(countries[1].Country);
+                        for (let i = 0; i < countries.length; i++) {
+                            let country = countries[i];
+                            let row = table.insertRow(-1); // -1 to append at end of table
+                            let c1 = row.insertCell(0);
+                            let c2 = row.insertCell(1);
+                            let c3 = row.insertCell(2);
+                            let c4 = row.insertCell(3);
+                            c1.innerHTML = country.Country;
+                            c2.innerHTML = new Intl.NumberFormat().format(country.TotalConfirmed);
+                            c3.innerHTML = new Intl.NumberFormat().format(country.TotalDeaths);
+                            c4.innerHTML = new Intl.NumberFormat().format(country.TotalConfirmed);
+                        }
+                    })
+                }
+            })
+        </script>
+        <footer class="container-fluid text-center col-md-12">
+            <p>Simone Susino</p>
+        </footer>
+    </div>
+</div>
+</body>
+</html>
+
+
+

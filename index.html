@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="application/javascript" src="js/jquery-3.6.0.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+            /*background-color: ;*/
+
+        }
+
+        /* Add a gray background color and some padding to the footer */
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
+            position: relative;
+            left: 0;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+        }
+        .form-select{
+            float: right;
+        }
+
+        h1 {
+            text-align: left;
+        }
+
+        .recovery {
+            width: 100px;
+        }
+
+        .death {
+            width: 100px;
+        }
+
+        .cov {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Dashboard</a></li>
+                <li><a href="countries.html">Live Countries</a></li>
+                <li><a href="admin.php">Admin</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br>
+
+<div class="container-fluid bg-3 text-center">
+    <div class="col-sm-12">
+        <div class="well">
+            <h2>World Wide</h2>
+            <h4>Covid-19 Live Information</h4>
+            <h5 id="Date">
+            </h5>
+            <script> //get and show the current time and date
+                const d = new Date();
+                document.getElementById("Date").innerHTML = d;
+            </script>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="well">
+                        <h4><img class="cov" src="icons/icon_coronavirus_navy.png">Total Confirmed</h4>
+                        <h5 id="tot_conf">
+                            <script>
+                                //jquery for the GET request
+                                $(document).ready(function () {
+                                    //using ajax to fetch the data from the api using world.php
+                                    $.ajax({type: 'GET', url: 'world.php'}).done((callback) => {
+                                        // console.log(callback)
+                                        // console.log(typeof callback)
+
+                                        // parse the json file requested from the API
+                                        let temp = JSON.parse(callback);
+                                        // console.log(temp)
+
+                                        //jquery syntax to show the TotalConfirmed value in the h5 with id tot_conf
+                                        $('#tot_conf').text(new Intl.NumberFormat().format(temp.TotalConfirmed));
+                                    })
+                                });
+                            </script>
+                        </h5>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well">
+                    <h4><img class="recovery" src="icons/recovery-icon-18.jpg.png">Total Recovered</h4>
+                    <h5 id="tot_rec"></h5>
+                    <script>
+                        // same script as used above
+                        $(document).ready(function () {
+                            $.ajax({type: 'GET', url: 'world.php'}).done((callback) => {
+                                let temp = JSON.parse(callback);
+                                // console.log(temp)
+                                //this time we get the TotalRecovered value from the json fetched
+                                $('#tot_rec').text(new Intl.NumberFormat().format(temp.TotalRecovered));
+
+                            })
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="well">
+                    <h4><img class="death" src="icons/death-icon-13.jpg.png">Total Deaths</h4>
+                    <h5 id="tot_dea"></h5>
+                    <script>
+                        // same script as used above
+                        $(document).ready(function () {
+                            $.ajax({type: 'GET', url: 'world.php'}).done((callback) => {
+                                let temp = JSON.parse(callback);
+                                // console.log(temp)
+                                //this time we get the TotalDeaths
+                                $('#tot_dea').text(new Intl.NumberFormat().format(temp.TotalDeaths));
+
+                            })
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!--form select to choose a date range-->
+        <select id="select" class="form-select" aria-label="Default select example">
+            <option selected>Select Date Range</option>
+            <option value="1" >Last 7 Days</option>
+            <option value="2">Last 14 Days</option>
+            <option value="3">Last 30 Days</option>
+        </select>
+        <br><br>
+
+        <script>
+            <!--last days script to calculate the last 7/14/30 days from the current date-->
+            $('select').change(function (){
+                //initialize the variables
+                let api, current,finalDate,curr, date;
+                //check which is the option selected in the form select menu
+                if (document.getElementById("select").value == 1) {
+                    date = new Date();
+                    curr = new Date();
+                    //calculate current date subtract 7 to get finalDate and have a range of 7 days
+                    date.setDate(date.getDate() - 7);
+                    finalDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                    current = curr.getFullYear() + '-' + (curr.getMonth() + 1) + '-' + curr.getDate();
+                    // console.log(current)
+                    // console.log(typeof current)
+                    // console.log(finalDate)
+                    //create the string for the api using the date range created above
+                    api = "https://api.covid19api.com/world?from=" + finalDate + "T00:00:00Z&to=" + current + "T00:00:00Z";
+                    // console.log(api)
+                    //call the function api to populate the table
+                    populate(api);
+                } else if (document.getElementById("select").value == 2) {
+                    //same script used above
+                    date = new Date();
+                    curr = new Date();
+                    date.setDate(date.getDate() - 14);
+                    finalDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                    current = curr.getFullYear() + '-' + (curr.getMonth() + 1) + '-' + curr.getDate();
+                    // console.log(current)
+                    // console.log(finalDate)
+                    api = "https://api.covid19api.com/world?from=" + finalDate + "T00:00:00Z&to=" + current + "T00:00:00Z";
+                    // console.log(api)
+                    populate(api);
+                } else if (document.getElementById("select").value == 3) {
+                    //same script used above
+                    date = new Date();
+                    curr = new Date();
+                    date.setDate(date.getDate() - 30);
+                    finalDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+                    current = curr.getFullYear() + '-' + (curr.getMonth() + 1) + '-' + curr.getDate();
+                    // console.log(current)
+                    // console.log(finalDate)
+                    api = "https://api.covid19api.com/world?from=" + finalDate + "T00:00:00Z&to=" + current + "T00:00:00Z";
+                    // console.log(api)
+                    populate(api);
+                }
+            })
+            //function to populate the table with the values obtained from the api
+            function populate(api){
+                let api_url = api;
+                initialize();
+                function initialize(){
+                    //fetch the data from the api and assigned it to data variable
+                    fetch(api_url).then(response =>{
+                        return response.json();
+                    }).then(data => {
+                        //empty the table before populating it
+                        $('table tbody').empty();
+                        //for loop for the data variable and appending the value to the body of the table
+                        for (let i = 0; i < data.length; i++) {
+                            $('#table tbody').append(
+                                "<tr>"
+                                +"<td>"+new Intl.NumberFormat().format(data[i].NewConfirmed)+"</td>"
+                                +"<td>"+new Intl.NumberFormat().format(data[i].TotalConfirmed)+"</td>"
+                                +"<td>"+new Intl.NumberFormat().format(data[i].NewDeaths)+"</td>"
+                                +"<td>"+new Intl.NumberFormat().format(data[i].TotalDeaths)+"</td>"
+                                +"<td>"+new Intl.NumberFormat().format(data[i].NewRecovered)+"</td>"
+                                +"<td>"+new Intl.NumberFormat().format(data[i].TotalRecovered)+"</td>"
+                                +"<td>"+new Date(data[i].Date).toDateString()+"</td>"
+                                +"</tr>"
+                            );
+
+                        }
+                    })
+                }
+            }
+        </script>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <!--  creating the table used in the populate function  -->
+                        <table id = "table" class="table table-striped table-responsive table-bordered table-hover table-sm">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th id ="cc" scope="col">New Confirmed</th>
+                                <th scope="col">Total Confirmed</th>
+                                <th scope="col">New Deaths</th>
+                                <th scope="col">Total Deaths</th>
+                                <th scope="col">New Recovered</th>
+                                <th scope="col">Total Recovered</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+
+        <footer class="container-fluid text-center col-md-12">
+            <p>Simone Susino</p>
+        </footer>
+    </div>
+</div>
+</body>
+</html>
+
