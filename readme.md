@@ -29,6 +29,9 @@ If you want to use a new database please create the database following the instr
 The dashboard has been tested in Firefox 88 and Safari 14.1 
 ![Screenshot](Screenshot.png)
 
+## License
+
+[MIT License] (LICENSE)
 
 
 
